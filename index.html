@@ -493,18 +493,28 @@
                 frameDiv.innerHTML = `<video src="${frame.src}" controls></video>`;
             }
 
-            frameDiv.addEventListener("click", () => {
-                if (frame.type === "image") {
-                    modalMedia.src = frame.src;
-                    modalMedia.tagName = "img";
-                } else if (frame.type === "video") {
-                    modalMedia.outerHTML = `<video id="modal-media" class="modal-media" src="${frame.src}" controls autoplay></video>`;
-                }
-                modalDescription.textContent = frame.desc;
-                modal.style.display = "flex";
-            });
+            // Add an event listener to close the modal when clicking outside the modal content
+          modal.addEventListener("click", (e) => {
+              // Check if the click occurred directly on the modal (outside the modal content)
+              if (e.target === modal) {
+                  modal.style.display = "none";
+              }
+          });
+          
+          // Add the main event listener for opening the modal
+          frameDiv.addEventListener("click", () => {
+              if (frame.type === "image") {
+                  modalMedia.src = frame.src;
+                  modalMedia.tagName = "img";
+              } else if (frame.type === "video") {
+                  modalMedia.outerHTML = `<video id="modal-media" class="modal-media" src="${frame.src}" controls autoplay></video>`;
+              }
+              modalDescription.textContent = frame.desc;
+              modal.style.display = "flex";
+          });
+          
+          contentDiv.appendChild(frameDiv);
 
-            contentDiv.appendChild(frameDiv);
         }
     });
 }
