@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <title>Waki's Works</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "IBM Plex Mono", serif;
+      font-weight: 400;
+      font-style: normal;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      transition: background-color 0.3s ease;
+    }
+
+    /* Left Menu Section */
+    .menu {
+      width: 25%;
+      height: 100%;
+      padding: 2.3vh;
+      margin-left: 1vh;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      position: fixed;
+      top: 0;
+      left: 0;
+      overflow-y: auto;
+      z-index: 1000;
+      transition: background-color 0.3s ease;
+      background: inherit;
+    }
+
+    .menu button {
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      color: #000;
+      text-align: left;
+      transition: color 0.3s ease;
+      font-family: "IBM Plex Mono", serif;
+      font-weight: 600;
+      font-style: normal;
+    }
+
+    .menu button:hover {
+      color: #FFFF00;
+      transform: scale(1.05); /* Default size */
+      transition: transform 0.3s ease; /* Smooth scaling animation */
+    }
+
+    .content {
+      margin-left: 25%;
+      padding: 2.3vh;
+      width: 75%;
+      overflow-y: auto;
+      position: relative;
+      height: 100vh;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr); /* 3 equal columns by default */
+      gap: 3vh; /* Space between frames */
+    }
+
+    /* For tablets */
+    @media (max-width: 1024px) {
+      .menu {
+        position: absolute; /* Allow menu to move with content */
+        width: 30%; /* Adjust menu width for tablets */
+        height: auto; /* Full height for the menu */
+        overflow-x: hidden;
+      }
+
+      .content {
+        margin-left: 30%; /* Adjust content margin to match menu */
+        width: 70%;
+      }
+    }
+
+    /* For mobile screens */
+    @media (max-width: 768px) {
+      .menu {
+        position: static; /* Stack menu above the content */
+        width: 100%; /* Full width for menu on small screens */
+        height: 60%; /* Menu height adjusts based on its content */
+      }
+
+      .content {
+        margin-left: 0; /* No left margin */
+        width: 100%; /* Full width for content */
+        margin-top: 0; /* Content starts right after the menu */
+      }
+
+      .menu button {
+        font-size: 1.5rem; /* Slightly smaller text for smaller devices */
+      }
+
+      /* Reduce the font size for better readability on small screens */
+      .social-media a {
+        font-size: 1.2rem;
+      }
+    }
+
+    /* Adjust Modal Content */
+    .modal-content {
+      width: 80%; /* Make modal content more flexible on smaller screens */
+      max-height: 90%;
+    }
+
+    .modal-media {
+      max-width: 100%;
+      max-height: 80vh; /* Limit the media size */
+      margin: 0 auto;
+    }
+
+    /* Frame Styling */
+    .frame {
+      background-color: #ffffff00;
+      overflow: hidden;
+      cursor: pointer;
+      width: 100%; /* You can adjust this to your desired width */
+      height: 500vh; /* You can adjust this to your desired height */
+      display: flex;
+      margin-bottom: 10vh auto;
+      justify-items: center; /* Centers grid items horizontally */
+      align-items: center;
+    }
+
+    /* Ensure the image/video inside fills the frame properly */
+    .frame img,
+    .frame video {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+
+    /* For tablet devices in portrait mode */
+    @media screen and (max-width: 1024px) and (orientation: portrait) {
+      .content {
+        grid-template-columns: repeat(2, 1fr); /* Reduce to 2 columns for portrait tablets */
+        gap: 2vh; /* Adjust gap for smaller spacing */
+      }
+    }
+
+    /* For smaller screens (like mobile devices), reduce to 2 columns */
+    @media screen and (max-width: 768px) {
+      .content {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns for medium-sized screens */
+      }
+    }
+
+    /* For very small screens (like phones in portrait mode), make it 1 column */
+    @media screen and (max-width: 480px) {
+      .content {
+        grid-template-columns: 1fr; /* 1 column for small screens */
+      }
+    }
+
+    /* Media Queries for responsiveness */
+    @media (max-width: 768px) {
+      .frame {
+        max-width: 100%; /* Use full width on smaller screens */
+        margin: 10px 0; /* Adjust margins for small screens */
+      }
+    }
+
+    @media (min-width: 768px) and (max-width: 1200px) {
+      .frame {
+        max-width: 80%; /* Adjust the max-width on medium-sized screens */
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .frame {
+        max-width: 600px; /* Set a larger max-width for large screens */
+      }
+    }
+
+    /* Hover effect for frames */
+      .frame:hover {
+      transform: scale(1.05);
+      transition: transform 0.3s ease;
+    }
+
+    /* Pop-up Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8); /* Dark transparent overlay */
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .modal-content {
+      background: linear-gradient(to bottom, #ffffff00 50%, #5578a0 100%), url('images/1.jpg') fixed;
+      padding: 30px;
+      border-radius: 0px;
+      width: 60%;
+      max-height: 90%;
+      overflow-y: auto;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-media {
+      display: block;
+      max-width: 90%; /* Limit the width to 90% of the modal */
+      max-height: 80vh; /* Limit the height to 80% of the viewport height */
+      margin: 0 auto; /* Center the media horizontally */
+      margin-bottom: 30px;
+    }
+
+    .modal-description {
+      font-size: 1.2rem;
+      color: #000;
+      line-height: 1.3;
+      text-align: center;
+      font-family: "IBM Plex Mono", serif;
+      font-weight: 400;
+      font-style: normal;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 32px;
+      color: #000;
+      cursor: pointer;
+    }
+
+    .social-media {
+      display: flex;
+      flex-direction: column;
+      gap: 5px; /* Adds space between the links */
+    }
+
+    .social-media a {
+      text-decoration: none;
+      font-size: 1.36rem;
+      margin-right: 20px;
+      color: #000;
+      display: inline-block; /* Ensure it's treated like a block element for scaling */
+      transition: color 0.3s ease, transform 0.3s ease; /* Smooth transition for color and scale */
+      transform-origin: left;
+    }
+
+    .social-media a:hover {
+      color: #1560bd;
+      transform: scale(1.05); /* Default size */
+      transition: transform 0.3s ease; /* Smooth scaling animation */
+    }
+
+    /* About Me Section */
+    .about-me {
+      color: #000;
+      line-height: 3.5vh; /* Adjust this value to control the spacing between lines */
+      font-size: 1.36rem; /* Optional: Adjust font size if needed */
+      margin-bottom: 1.5vh; /* Optional: Add some spacing between descriptions */
+      text-align: left;
+    }
+
+    /* Optional styling for a fade-in effect */
+    #popupBox {
+        animation: fadeIn 0.3s ease-in-out;
+        cursor: pointer;
+    }
+
+    .hover-video {
+        transform: scale(1.05); /* Default size */
+        transition: transform 0.3s ease; /* Smooth scaling animation */
+    }
+
+    .hover-video:hover {
+        transform: scale(1.15); /* Enlarged size on hover */
+    }
+
+    @keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+  </style>
+</head>
+<body>
+  <div id="menu" class="menu">
+    <button onclick="showCategory('about-me')">Waki's:</button>
+    <button onclick="showCategory('commissioned')">commissioned works</button>
+    <button onclick="showCategory('org')">org works</button>
+    <button onclick="showCategory('personal')">personal works</button>
+    <button onclick="showCategory('ionmaze')">ionmaze</button>
+    <button onclick="showCategory('boybrat')">BoyBrat</button>
+
+    <div style="position: relative; top: 1vh; left: 0.5vh;">
+      <button id="videoButton" style="padding: 0; border: none; background: none; cursor: pointer;">
+          <video class="hover-video" autoplay loop muted style="width: 100px; height: 100px; transition: transform 0.3s ease;">
+              <source src="videos/bloom.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+          </video>
+      </button>
+  </div>
+</div>
+  
+  <!-- Modal -->
+  <div id="popupBox" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 1000; align-items: center; justify-content: center;">
+      <div style="background: linear-gradient(to bottom, #ffffff00 50%, #5578a0 100%), url('images/1.jpg') fixed; padding: 20px; width: 600px; text-align: center;">
+          <h2>
+              <video autoplay loop muted src="videos/bloom.mp4" style="width: 400px; height: 400px; padding-bottom: 10px;"></video>
+          </h2>
+          <p>
+              This metal flower is my very first attempt at 3D modeling. I remember I spent the whole day just watching
+              beginner-friendly tutorials to make this single, tiny, revolving, shiny, and sparkly piece of metal flower.
+          </p>
+      </div>
+  </div>
+  
+
+  <!-- Right Section: Content -->
+  <div class="content" id="content">
+    <!-- Frames will be dynamically displayed here -->
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <span class="close-btn" id="closeBtn">&times;</span>
+      <img id="modal-media" class="modal-media" alt="Selected Media">
+      <p id="modal-description" class="modal-description">Description of the selected media will appear here.</p>
+    </div>
+  </div>
+
+  <script>
+    const contentDiv = document.getElementById("content");
+    const modal = document.getElementById("modal");
+    const modalMedia = document.getElementById("modal-media");
+    const modalDescription = document.getElementById("modal-description");
+    const closeBtn = document.getElementById("closeBtn");
+
+    const categories = {
+      "about-me": {
+        background: "#FFF",
+        content: [
+        { type: "description", desc: "Hi! I'm Waki, a graphic designer from Manila. I specialize in posters, illustrations, logos, and branding, while also exploring 3D modeling, motion graphics, and video editing. My style is bold, colorful, and fun, with the goal of grabbing attention. I love collaborating with others and am always excited to take on new challenges to grow as an artist." },
+        { type: "social-media", links: [
+            { href: "https://github.com", icon: "💻 Waki's LinkedIn" },
+            { href: "mailto:oaquiiv@gmail.com", icon: "📧 Waki's GMail" },
+            { href: "https://github.com", icon: "🖼️ Waki's Behance" },
+            { href: "https://www.instagram.com/ionmaze/", icon: "📷 Waki's Instagram" },
+            { href: "https://www.facebook.com/wacky06/", icon: "📘 Waki's Facebook" },
+          ]
+        },
+        { type: "image", src: "images/me.gif", desc: "Oh, hi there! I drew this self-portrait when I was 19 as a requirement for one of my subjects back then. Do I still look like this? Well, I do think that I do... Hopefully! The only difference is I have MUCH longer hair now, I have new glasses, and I became much more cuter 😉", style: "width: 30.8vh; height: 43.4vh;" },
+      ]
+    },
+      "commissioned": {
+        background: "url('images/commission.jpg') no-repeat center center fixed",
+        content: [
+        { type: "image", src: "commissions/ren.png", desc: "This was a commission from my cousin to make a poster for one of his subject requirements.", style: "width: 288px; height: 384px;" },
+        { type: "image", src: "commissions/styleboard.gif", desc: "SAMIOBRA hired me as the stylist for her thesis project, and this is the styling peg board I presented to her.", style: "width: 384px; height: 266.8px;" },
+        { type: "image", src: "commissions/cyen.gif", desc: "SAMIOBRA hired me as the stylist for her thesis project and here's how the approved styling turned out for two of the five looks.", style: "width: 232.73px; height: 349.1px;" },
+        { type: "image", src: "commissions/resibo.png", desc: "I joined my friend's team to help with her thesis project. She created the receipt layout and asked me to add textures to it.", style: "width: 243px; height: 469px;" },
+        { type: "image", src: "commissions/resibo.gif", desc: "This was a commissioned project from SAMIOBRA for her collaboration with ALAMAT. She asked me to design Filipino bus receipts to be printed on fabric for the clothing she's creating for the boy group.", style: "width: 225.84px; height: 362.82px;" },
+        { type: "image", src: "commissions/guia.png", desc: "This was a commissioned artwork for one of my friends.", style: "width: 300px; height: 300px;" },
+      ]
+    },
+      "org": {
+        background: "url('images/org.jpg') no-repeat center center fixed",
+        content: [
+        { type: "description", desc: "I was a member of my university's multimedia organization called LPU Multimedia Arts Society (LMAS) for one year. Over the span of that time, I created these publication materials for events and announcements." },
+        { type: "image", src: "org/resopen.jpg", desc: "I made this for an event of LMAS titled Spooky Christmas Extravangaza. It was in celebration of Halloween and Christmas. It was basically a Halloween party but with Christmas foods and activities.", style: "width: 300px; height: 300px;" },
+        { type: "image", src: "org/cosguide.jpg", desc: "This is a poster for the event's costume guidelines.", style: "width: 300px; height: 300px;" },
+        { type: "image", src: "org/resclosed.jpg", desc: "This one did not end up getting posted because if I remember correctly, the social media handlers of LMAS opted to just include the closed registration announcement along with the final poster for the event.", style: "width: 300px; height: 300px;" },
+        { type: "image", src: "org/hunt.png", desc: "This is a poster for the announcement of LMAS' 2023 Committee Hunt Results. There aren't any names on this poster because they just made me do the template.", style: "width: 300px; height: 300px;" },
+        { type: "image", src: "org/rizal.jpg", desc: "This is an announcement poster for the 125th Rizal Day.", style: "400px; width: 300px; height: 300px;" },
+        { type: "image", src: "org/db.gif", desc: "This is a poster that I did in collaboration of LMAS with Tanghalang Batingaw, the theatre org of my university. I've also made a banner version of the same poster for Batingaw's Facebook account.", style: "width: 300px; height: 300px;" },
+      ]
+    },
+      "personal": {
+        background: "url('images/personal.jpg') no-repeat center center fixed",
+        content: [
+        { type: "image", src: "personal/garbinia.gif", desc: "These are the mock-ups for the design that I did for a group project about a product campaign. I did the designs for the packaging, poster, magazine, and billboard mock-ups.", style: "width: 300px; height: 300px;" },
+        { type: "image", src: "personal/bunny.jpg", desc: "This was a packaging layout activity for one of my subjects, where we were tasked to create a brand for a beverage of our choice. I chose carrot juice and we were allowed to use online assets, so I chose the bunny mascot of NewJeans because it fit well with the brand and product.", style: "width: 300px; height: 270px;" },
+        { type: "image", src: "personal/main.gif", desc: "These slides are from my presentation on a logo design project. Each of us was assigned a business to create a logo for, and I was given a tropical hotel amenity business called Main. For the text logo, I used the letter M as the focal point, shaping it like a wave and extending a tail to form a coconut tree.", style: "width: 300px; height: 200px;" },
+        { type: "image", src: "personal/oral.jpg", desc: "This is an advertisement poster for a dental service business that I made during my 2nd year in college.", style: "width: 300px; height: 180px;" },
+        { type: "image", src: "personal/madbrain.gif", desc: "This is another logo-making activity for a business named Mad Brain Games, and this shows my creative process for that.", style: "width: 300px; height: 300px;" },
+        { type: "image", src: "personal/tint.jpg", desc: "This is another advertisement poster for a lip-tint product that I made during my 2nd year in college.", style: "width: 230px; height: 300px;" },
+        { type: "image", src: "personal/papa.jpg", desc: "This is an invitation card design that I made for my father's 50th birthday.", style: "width: 260px; height: 300px;" },
+        { type: "image", src: "personal/kurimaw.jpg", desc: "This is a poster that I made for a group project horror film.", style: "width: 200px; height: 300px;" },
+        { type: "image", src: "personal/kumpisal.jpg", desc: "This is another poster that I made for a group project film about queerness, however, this one was not used.", style: "width: 200px; height: 300px;" },
+        
+        { type: "image", src: "personal/nouveau.jpg", desc: "This is an Art Nouveau inspired artwork advertisement poster I made for a class requirement. This took such a long time to make, but I'm so proud of how it turned out.", style: "width: 200px; height: 300px;" },
+        { type: "image", src: "personal/pop.jpg", desc: "This is a Pop Art inspired artwork poster I made for a class requirement.", style: "width: 200px; height: 300px;" },
+        { type: "image", src: "personal/deco.jpg", desc: "This is an Art Deco inspired artwork poster I made for a class requirement.", style: "width: 200px; height: 300px;" },
+        { type: "image", src: "personal/constructivism.jpg", desc: "This is a Constructivism inspired advertisement poster I made for a class requirement.", style: "width: 220px; height: 300px;" },
+        { type: "image", src: "personal/plakatstil.jpg", desc: "This is a Plakatstil inspired artwork advertisement poster I made for a class requirement.", style: "width: 300px; height: 250px;" },
+        { type: "image", src: "personal/callcard.gif", desc: "This is for a calling card design exercise.", style: "width: 300px; height: 190px;" },
+        { type: "image", src: "personal/sketch.gif", desc: "I drew and vectorized these hands out of boredom. It served as an exercise for me a well.", style: "width: 300px; height: 300px;" },
+        { type: "image", src: "personal/icon.gif", desc: "This is another 3D metal flower that I did on Blender. Tried experimenting with HDRI's for the first time and I had a blast with it.", style: "width: 300px; height: 300px;" },
+        { type: "image", src: "personal/club.gif", desc: "Stumbled upon a Blender tutorial I found absolutely fascinating, followed that, and the result was this.", style: "width: 300px; height: 300px;" },
+      ]
+    },
+      "ionmaze": {
+        background: "url('images/ionmaze.jpg') no-repeat center center fixed",
+        content: [
+        { type: "description", desc: "ionmaze is an online clothing shop that I created and opened during my third year in college. I source the clothes through thrifting and then I customize them with airbrushed artworks. Creating ionmaze was my way of getting my art out there and it has given me many learnings that I can definitely apply to my future works." },
+        { type: "image", src: "ionmaze/ionlogos.png", desc: "I made these logos when I was coming up names for the shop. I was quite indecisive in choosing the name, so I asked a friend for help. She told me to try making logos for the names I was choosing and ionmaze felt the most right. These logos were inspired from sci-fi games and cartoons from the late and early 2000's.", style: "width: 300px; height: 300px;" },
+        { type: "image", src: "ionmaze/mood.gif", desc: "These are mood boards that I made for posting to help potential customers visualize how they would be able to style the ionmaze pieces.", style: "width: 300px; height: 300px;" },
+        { type: "image", src: "ionmaze/sheet.png", desc: "I made sticker sheets because I wanted to gauge my customers' interest when I introduce a new product other than clothing, and to my surprise they were very interested because all 15 pieces were sold out.", style: "width: 212px; height: 300px;" },
+        { type: "image", src: "ionmaze/ammoretti.gif", desc: "This is Ammoretti and I made her because I needed a mascot to represent the brand.", style: "width: 300px; height: 300px;" },
+        { type: "image", src: "ionmaze/hands.gif", desc: "This is a full preview for ionmaze's third collection.", style: "width: 300px; height: 300px;" },
+        { type: "image", src: "ionmaze/arch.gif", desc: "This is a 3D render of a logo I made for ionmaze.", style: "width: 300px; height: 300px;" },
+        { type: "image", src: "ionmaze/alien.jpg", desc: "I made this 3D model in our 3D class with ionmaze in mind. It's a low poly render to resemble 3D games from the 2000's.", style: "width: 300px; height: 300px;" },
+        { type: "image", src: "ionmaze/newy.gif", desc: "I made this in celebration of the new year.", style: "width: 300px; height: 300px;" },
+        { type: "image", src: "ionmaze/maze.jpg", desc: "I had an idea to draw a literal maze formed to spell out 'ionmaze'. This was inspired by the children's books of early and late 2010's.", style: "width: 300px; height: 300px;" },
+      ]
+    },
+      "boybrat": {
+        background: "url('images/boybrat.jpg') no-repeat center center fixed",
+        content: [
+        { type: "description", desc: "BoyBrat was conceived because of a requirement from one of my subjects. It was an activity about branding and we needed to come up with a business we wanted to do. Clothes. I wanted to brand a clothing business and the activity made me think of how I could brand ionmaze in another lens." },
+        { type: "image", src: "bb/cupine.gif", desc: "Just like ionmaze, I made a mascot for BoyBrat too. This shows the process that I did from sketch to render. In contrast with ionmaze's Ammoretti, this one has spiky features to evoke the feeling of rebelliousness.", style: "width: 332.48px; height: 268.05px;" },
+        { type: "image", src: "bb/brandg.gif", desc: "This is the brand guidelines for BoyBrat.", style: "width: 348px; height: 271.4px;" },
+        { type: "image", src: "bb/shirts.gif", desc: "These are some sample mock-up shirts that I made.", style: "width: 290.92px; height: 290.92px;" },
+        { type: "image", src: "bb/logovar.gif", desc: "These are the color variations of BoyBrat's text logo. I drew inspiration from 90's streetwear brands like JNCO and Ben Davis.", style: "width: 349.1px; height: 109.67px;" },
+        { type: "image", src: "bb/banner.gif", desc: "These are the banners that I made for BoyBrat's made-up collab with Charli xcx. I observed that other clothing brands often have collaborations with music artists to widen their target market, so I made one for BoyBrat.", style: "width: 349.1px; height: 162px;" },
+        { type: "image", src: "bb/3d.gif", desc: "These are some 3D renders that I made for BoyBrat's mood board.", style: "width: 256px; height: 256px;" },
+      ]
+    },
+   }
+
+   function showCategory(category) {
+    // Clear current content
+    contentDiv.innerHTML = ""; 
+
+    const categoryData = categories[category];
+
+    // Set gradient for the entire page and menu
+    const gradient = categoryData.background; // Assume background is a gradient
+    document.body.style.transition = "background 0.5s ease";
+    document.body.style.background = gradient;
+
+    const menu = document.querySelector(".menu");
+    menu.style.transition = "background 0.5s ease";
+    menu.style.background = gradient;
+
+    // Populate content dynamically
+    categoryData.content.forEach(frame => {
+        if (frame.type === "description") {
+            const descriptionDiv = document.createElement("div");
+            descriptionDiv.className = "about-me";
+            descriptionDiv.innerText = frame.desc;
+            contentDiv.appendChild(descriptionDiv);
+        } else if (frame.type === "social-media") {
+            const socialDiv = document.createElement("div");
+            socialDiv.className = "social-media";
+            
+            frame.links.forEach(link => {
+                const socialLink = document.createElement("a");
+                socialLink.href = link.href;
+                socialLink.target = "_blank";
+                socialLink.innerText = link.icon;
+                socialDiv.appendChild(socialLink);
+            });
+
+            contentDiv.appendChild(socialDiv);
+        } else {
+            const frameDiv = document.createElement("div");
+            frameDiv.className = "frame";
+            frameDiv.style = frame.style;
+
+            if (frame.type === "image") {
+                frameDiv.innerHTML = `<img src="${frame.src}" alt="Image">`;
+            } else if (frame.type === "video") {
+                frameDiv.innerHTML = `<video src="${frame.src}" controls></video>`;
+            }
+
+            frameDiv.addEventListener("click", () => {
+                if (frame.type === "image") {
+                    modalMedia.src = frame.src;
+                    modalMedia.tagName = "img";
+                } else if (frame.type === "video") {
+                    modalMedia.outerHTML = `<video id="modal-media" class="modal-media" src="${frame.src}" controls autoplay></video>`;
+                }
+                modalDescription.textContent = frame.desc;
+                modal.style.display = "flex";
+            });
+
+            contentDiv.appendChild(frameDiv);
+        }
+    });
+}
+
+// Select elements
+const videoButton = document.getElementById('videoButton');
+const popupBox = document.getElementById('popupBox');
+
+// Show popup when the video button is clicked
+videoButton.addEventListener('click', () => {
+    popupBox.style.display = 'flex'; // Show the popup box
+});
+
+// Optional: Close popup when clicking outside the box
+popupBox.addEventListener('click', (e) => {
+    if (e.target === popupBox) {
+        popupBox.style.display = 'none';
+    }
+});
+
+
+// Event Listeners for Modal
+closeBtn.addEventListener("click", () => {
+    modal.style.display = "none";
+});
+
+window.addEventListener("click", (e) => {
+    if (e.target === modal) {
+        modal.style.display = "none";
+    }
+});
+
+// Load the first category by default
+showCategory("about-me");
+  </script>
+</body>
+</html>
